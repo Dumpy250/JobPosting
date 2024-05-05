@@ -1,0 +1,40 @@
+﻿@model JobPosting.Models.Job
+
+<h1>Create Job</h1>
+
+<form asp-action="Create">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmployerId" class="control-label"></label>
+        <select asp-for="EmployerId" asp-items="ViewBag.Employers">
+            <option value="">-- Select Employer --</option>
+        </select>
+        <span asp-validation-for="EmployerId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>ApplicantJobs</label>
+        <input type="number" name="ApplicantJobs[0].ApplicantId" class="form-control" placeholder="Applicant Id" />
+        <!-- Add more fields for each property of ApplicantJob as needed -->
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

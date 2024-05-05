@@ -1,0 +1,36 @@
+﻿@model IEnumerable<JobPosting.Models.Employer>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to Job Posting!</h1>
+    <p class="lead">This is a simple job posting application built with ASP.NET Core and Bootstrap.</p>
+    <hr class="my-4">
+    <p>Click the buttons below to view the list of jobs and applicants.</p>
+    <a class="btn btn-primary btn-lg" asp-action="Index" asp-controller="Jobs" role="button">View Jobs</a>
+    <a class="btn btn-primary btn-lg" asp-action="Index" asp-controller="Applicants" role="button">View Applicants</a>
+</div>
+
+<h2>Employers</h2>
+
+<table class="table table-striped table-bordered">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <!-- Add other fields as necessary -->
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <!-- Add other fields as necessary -->
+        </tr>
+    }
+    </tbody>
+</table>
