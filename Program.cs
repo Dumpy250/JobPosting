@@ -1,25 +1,32 @@
+using System;
+using System.Threading.Tasks;
 using JobPosting.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// -------------------- Services --------------------
+
+// MVC controllers & views
 builder.Services.AddControllersWithViews();
 
-// Add this line to register JobPostingContext
-builder.Services.AddDbContext<JobPostingContext>(options =>
-options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
-    new MySqlServerVersion(new Version(8, 0, 37))));
+// Read connection string
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                       ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-// Register DatabaseService
+// DbContext registration
+builder.Services.AddDbContext<JobPostingContext>(options =>
+options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 37))));
+
+// Custom database test service
 builder.Services.AddScoped<DatabaseService>();
 
 var app = builder.Build();
 
-// Test database connection
-TestDatabaseConnection(app);
+// -------------------- Database Test (Safe + Awaited) --------------------
+await TestDatabaseConnectionAsync(app);
 
-// Configure the HTTP request pipeline.
+// -------------------- Middleware Pipeline --------------------
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -27,35 +34,37 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRouting();
 
+app.UseRouting();
 app.UseAuthorization();
 
+// MVC default routing
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+name: "default",
+pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
 
-void TestDatabaseConnection(WebApplication app)
+
+// -------------------- Helper Methods --------------------
+
+static async Task TestDatabaseConnectionAsync(WebApplication app)
 {
-    using (var serviceScope = app.Services.CreateScope())
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+
+    try
     {
-        var services = serviceScope.ServiceProvider;
-        try
-        {
-            var databaseService = services.GetRequiredService<DatabaseService>();
-            databaseService.TestDatabaseConnectionAsync();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An error occurred while testing the database connection: {ex.Message}");
-        }
+        var databaseService = services.GetRequiredService<DatabaseService>();
+        await databaseService.TestDatabaseConnectionAsync();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Database startup check failed: {ex.Message}");
     }
 }
