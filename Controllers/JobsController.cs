@@ -47,25 +47,23 @@ namespace JobPosting.Controllers
         }
 
         // GET: Jobs/Create
+// GET: Jobs/Create
         public IActionResult Create()
         {
-            var employers = new SelectList(_context.Employers, "Id", "Name");
-            if (employers == null || !employers.Any())
+            var employers = _context.Employers.ToList();
+
+            if (!employers.Any())
             {
-                // Log an error message or throw an exception
-                throw new Exception("No employers found in the database.");
+                TempData["ErrorMessage"] = "You must create an employer before creating a job.";
+                return RedirectToAction("Create", "Employers");
             }
 
-            ViewBag.Employers = employers;
-
-            // Convert SelectList to string and print it
-            var employersString = string.Join(", ", employers.Items.Cast<Employer>().Select(e => $"Id: {e.Id}, Name: {e.Name}"));
-            System.Diagnostics.Debug.WriteLine(employersString);
-
+            ViewBag.Employers = new SelectList(employers, "Id", "Name");
             return View();
         }
 
-        // POST: Jobs/Create
+
+// POST: Jobs/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,EmployerId")] Job job)
@@ -75,20 +73,22 @@ namespace JobPosting.Controllers
                 var employerExists = await _context.Employers.AnyAsync(e => e.Id == job.EmployerId);
                 if (!employerExists)
                 {
-                    // Log an error message or throw an exception
-                    throw new Exception("The selected employer does not exist.");
+                    ModelState.AddModelError("EmployerId", "The selected employer does not exist.");
                 }
-
-                // Set the Employer and ApplicantJobs properties
-                job.Employer = await _context.Employers.FindAsync(job.EmployerId);
-                job.ApplicantJobs = new List<ApplicantJob>(); // Initialize with an empty list
-
-                _context.Add(job);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                else
+                {
+                    job.ApplicantJobs = new List<ApplicantJob>();
+                    _context.Add(job);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
+
+            // repopulate dropdown on error
+            ViewBag.Employers = new SelectList(_context.Employers, "Id", "Name", job.EmployerId);
             return View(job);
         }
+
 
         // GET: Jobs/Edit/5
         public async Task<IActionResult> Edit(int? id)
