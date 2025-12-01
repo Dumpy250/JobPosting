@@ -1,0 +1,12 @@
+C:\Users\Camer\RiderProjects\JobPosting\bin\Release\net8.0\linux-x64\publish\JobPosting
+C:\Users\Camer\RiderProjects\JobPosting\bin\Release\net8.0\linux-x64\publish\appsettings.Development.json
+C:\Users\Camer\RiderProjects\JobPosting\bin\Release\net8.0\linux-x64\publish\appsettings.json
+C:\Users\Camer\RiderProjects\JobPosting\bin\Release\net8.0\linux-x64\publish\JobPosting.dll
+C:\Users\Camer\RiderProjects\JobPosting\bin\Release\net8.0\linux-x64\publish\JobPosting.runtimeconfig.json
+C:\Users\Camer\RiderProjects\JobPosting\bin\Release\net8.0\linux-x64\publish\JobPosting.pdb
+C:\Users\Camer\RiderProjects\JobPosting\bin\Release\net8.0\linux-x64\publish\Microsoft.EntityFrameworkCore.dll
+C:\Users\Camer\RiderProjects\JobPosting\bin\Release\net8.0\linux-x64\publish\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\Camer\RiderProjects\JobPosting\bin\Release\net8.0\linux-x64\publish\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\Camer\RiderProjects\JobPosting\bin\Release\net8.0\linux-x64\publish\MySqlConnector.dll
+C:\Users\Camer\RiderProjects\JobPosting\bin\Release\net8.0\linux-x64\publish\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\Camer\RiderProjects\JobPosting\bin\Release\net8.0\linux-x64\publish\JobPosting.deps.json
