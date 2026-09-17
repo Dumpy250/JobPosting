@@ -1,0 +1,3 @@
+# .NET build and publish output at any directory depth.
+**/[Bb]in/
+**/[Oo]bj/

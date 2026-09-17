@@ -131,12 +131,27 @@ cd JobPosting
 
 2️⃣ Configure Database Connection
 
-Edit appsettings.json:
+The tracked `appsettings.json` and `appsettings.Development.json` deliberately leave
+`ConnectionStrings:DefaultConnection` empty. Do not put database credentials in
+these files or commit local configuration containing credentials.
 
-``"ConnectionStrings": {
-  "DefaultConnection": "Server=localhost;Database=JobPostingDb;User=<username>;Password=<password>;"
-}
-``
+Before running the application or applying migrations, configure the environment
+variable `ConnectionStrings__DefaultConnection` through your local development
+process settings or your deployment platform's secret manager. Supply the full
+MySQL connection string there; the double underscore maps to the configuration
+key `ConnectionStrings:DefaultConnection`. ASP.NET Core's default configuration
+loads this environment override without code changes.
+
+Use a dedicated, least-privilege database account and a newly rotated credential.
+Do not paste credentials into shell commands, shell history, screenshots, or logs.
+The application checks the database connection on startup, so do not start it
+until the environment is configured for a database you are authorized to access.
+
+`bin/` and `obj/` are generated output, ignored recursively at every project depth.
+Keep them out of commits, including copied application settings and publish output.
+Deleting tracked copies does not invalidate exposed credentials or remove them
+from Git history. The owner must rotate the exposed credential everywhere it was
+reused and separately address historical exposure.
 
 3️⃣ Install Entity Framework CLI (if needed)
 
